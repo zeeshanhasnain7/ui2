@@ -1,12 +1,3 @@
-// ==UserScript==
-// @name Add Old UI Button
-// @namespace http://tampermonkey.net/
-// @version 1.0
-// @description Adds an "old ui" button in the header tag of a specific website with a timeout of 3 seconds
-// @match https://foodpanda-asia.deliveryherocare.com/*
-// @grant none
-// ==/UserScript==
-
 (function() {
   'use strict';
 
