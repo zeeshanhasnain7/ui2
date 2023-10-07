@@ -1,49 +1,66 @@
+// ==UserScript==
+// @name Add Old UI Button
+// @namespace http://tampermonkey.net/
+// @version 1.0
+// @description Adds an "old ui" button in the header tag of a specific website with a timeout of 3 seconds
+// @match https://foodpanda-asia.deliveryherocare.com/*
+// @grant none
+// ==/UserScript==
+
 (function() {
-    'use strict';
+  'use strict';
 
-    // Function to toggle between "old ui" and "new ui" and update the button text accordingly
-    function toggleUI() {
-        var iframe = document.getElementsByTagName('iframe')[0];
-        if (iframe) {
-            // Get the current URL of the iframe
-            var currentUrl = iframe.src;
+  // Function to add the UI toggle button
+  function addUIButton() {
+    var headerTag = document.getElementsByTagName('header')[0];
+    if (headerTag) {
+      var button = document.createElement('button');
+      button.innerHTML = 'Toggle UI';
+      button.style.marginRight = '10px';
+      button.style.background = '#1890ff';
+      button.style.color = '#fff';
+      button.style.height = '40px';
+      button.style.borderRadius = '10px';
+      button.style.width = '100px';
+      button.style.textAlign = 'center';
+      button.style.verticalAlign = 'middle';
+      button.style.outline = 'none';
+      button.style.lineHeight = '40px';
 
-            // Check if the current URL contains "uiVersion=v1" or "uiVersion=v2"
-            if (currentUrl.includes('uiVersion=v1')) {
-                // Replace "uiVersion=v1" with "uiVersion=v2" in the URL
-                var newUrl = currentUrl.replace('uiVersion=v1', 'uiVersion=v2');
+      // Add event listener to the button
+      button.addEventListener('click', toggleUI);
 
-                // Load the new URL in the iframe
-                iframe.src = newUrl;
-
-                // Change the button text to "old ui"
-                button.innerHTML = 'old ui';
-            } else if (currentUrl.includes('uiVersion=v2')) {
-                // Replace "uiVersion=v2" with "uiVersion=v1" in the URL
-                var newUrl = currentUrl.replace('uiVersion=v2', 'uiVersion=v1');
-
-                // Load the new URL in the iframe
-                iframe.src = newUrl;
-
-                // Change the button text to "new ui"
-                button.innerHTML = 'new ui';
-            }
-        }
+      headerTag.appendChild(button);
     }
+  }
 
-    // Function to add the "old ui" button
-    function addButton() {
-        var headerTag = document.getElementsByTagName('header')[0];
-        if (headerTag) {
-            var button = document.createElement('button');
-            button.innerHTML = 'old ui';
-            headerTag.appendChild(button);
+  // Function to toggle the UI version
+  function toggleUI() {
+    var iframe = document.getElementsByTagName('iframe')[0];
+    if (iframe) {
+      // Get the current URL of the iframe
+      var currentUrl = iframe.src;
 
-            // Add event listener to the button
-            button.addEventListener('click', toggleUI);
-        }
+      // Toggle between the old and new UI versions
+      var newUrl = currentUrl.includes('uiVersion=v1') ? currentUrl.replace('uiVersion=v1', 'uiVersion=v2') : currentUrl.replace('uiVersion=v2', 'uiVersion=v1');
+
+      // Load the new URL in the iframe
+      iframe.src = newUrl;
     }
+  }
 
-    // Delay execution by 3 seconds using setTimeout
-    setTimeout(addButton, 3000);
+  // Function to handle the shortcut key
+  function handleShortcut(event) {
+    // Check if Ctrl key and Spacebar are pressed
+    if (event.ctrlKey && event.code === 'Space') {
+      event.preventDefault(); // Prevent any default browser behavior
+      toggleUI(); // Execute the toggleUI function
+    }
+  }
+
+  // Add event listener to handle the shortcut key
+  document.addEventListener('keydown', handleShortcut);
+
+  // Delay execution by 3 seconds using setTimeout
+  setTimeout(addUIButton, 9000);
 })();
